@@ -1,10 +1,15 @@
 package main
 
 import (
+	"Poker/models"
 	"Poker/service"
 	"fmt"
 	"log"
 	"net/http"
+)
+
+var (
+	deck *models.Deck
 )
 
 func dealCardsHandler(w http.ResponseWriter, r *http.Request) {
@@ -13,11 +18,11 @@ func dealCardsHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	if r.URL.Path == "/deal_shared_cards" {
-		sharedCards := service.DrawSharedCards()
+		sharedCards := service.DrawSharedCards(deck)
 		fmt.Fprintf(w, sharedCards)
 
 	} else if r.URL.Path == "/deal_player_cards" {
-		playerCards := service.DrawPlayerCards()
+		playerCards := service.DrawPlayerCards(deck)
 		fmt.Fprintf(w, playerCards)
 
 	} else {
@@ -48,6 +53,8 @@ func getStrongestHandHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 func main() {
+
+	deck = models.CreateDeck()
 
 	http.HandleFunc("/deal_shared_cards", dealCardsHandler)
 

@@ -4,20 +4,24 @@ import (
 	"Poker/models"
 )
 
-func DrawSharedCards() string {
-	models.SharedCards = []models.Card{}
-	for i := 0; i < 5; i++ {
-		models.DrawSharedCard()
-	}
-	cardsConvertedToString := models.ConvertCardsListToString(models.SharedCards)
-	return cardsConvertedToString
+func DrawSharedCards(deck *models.Deck) string {
+
+	cards, cardsStringRepresntation := DrawCards(deck, 5)
+	models.SharedCards = cards
+	return cardsStringRepresntation
 }
 
-func DrawPlayerCards() string {
-	models.PlayerCards = []models.Card{}
-	for i := 0; i < 2; i++ {
-		models.DrawPlayerCard()
+func DrawPlayerCards(deck *models.Deck) string {
+	cards, cardsStringRepresntation := DrawCards(deck, 2)
+	models.PlayerCards = cards
+	return cardsStringRepresntation
+}
+
+func DrawCards(deck *models.Deck, numberOfCards int) ([]models.Card, string) {
+	cards := []models.Card{}
+	for i := 0; i < numberOfCards; i++ {
+		card := deck.DrawRandomCard()
+		cards = append(cards, card)
 	}
-	cardsConvertedToString := models.ConvertCardsListToString(models.PlayerCards)
-	return cardsConvertedToString
+	return cards, models.ConvertCardsListToString(cards)
 }
